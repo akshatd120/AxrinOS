@@ -3,12 +3,27 @@
 */
 #include "types.h"
 
-void m_printf(char* cstr)
+void clearScr(){
+    uint16_t* VIDEO_MEMORY = (uint16_t*)0xb8000;
+    for(int i = 0;i < 80 * 25; ++i)
+    {
+        VIDEO_MEMORY[i] = 0;
+    }
+}
+
+void m_printf(char* cstr, uint8_t color = 0x07)
 {
-    uint16_t * VIDEO_MEMORY = (uint16_t*)0xb8000;
-    for (int i = 0; cstr[i] != '\0' ; ++i)
-        VIDEO_MEMORY[i] = (VIDEO_MEMORY[i] & 0xFF00) | cstr[i];
-        //Refer Video https://www.youtube.com/watch?v=1rnA6wpF0o4&list=PLHh55M_Kq4OApWScZyPl5HhgsTJS9MZ6M&index=1;
+    uint16_t* VIDEO_MEMORY = (uint16_t*)0xb8000;
+    static uint8_t x = 0,
+    static uint8_t y = 0;
+    for (int i = 0; cstr[i] != '\0' ; ++i){
+        
+        VIDEO_MEMORY[y * 80 + x] = ((uint16_t)color << 8) | cstr[i];
+        if(cstr[i] == '\n' || x >= 80) {
+            y += 1;
+            x = 0;
+        }
+    }
 }
 
 typedef void(*constructor)();
@@ -24,7 +39,7 @@ extern "C" void callConstructors()
 
 extern "C" void kernelMain(const void* multiboot_structure, uint32_t magicNum)
 {
-    m_printf((char*)"Hello World v1.0.1");
+    m_printf((char*)"OS INFO: Axrin OS v1.2\n");
     
     while(1);
 }
