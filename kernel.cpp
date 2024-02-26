@@ -39,6 +39,7 @@ extern "C" void callConstructors()
 
 extern "C" void kernelMain(const void* multiboot_structure, uint32_t magicNum)
 {
+    clearScr();
     m_printf((char*)"OS INFO: Axrin OS v1.2\n");
     
     while(1);
