@@ -14,7 +14,7 @@ void clearScr(){
 void m_printf(char* cstr, uint8_t color = 0x07)
 {
     uint16_t* VIDEO_MEMORY = (uint16_t*)0xb8000;
-    static uint8_t x = 0,
+    static uint8_t x = 0;
     static uint8_t y = 0;
     for (int i = 0; cstr[i] != '\0' ; ++i){
         
